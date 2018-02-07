@@ -1,0 +1,6 @@
+[run]
+omit =
+    openapi21/version.py
+    *__init__*
+
+branch = True

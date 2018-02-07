@@ -1,0 +1,3 @@
+[submodule "OpenAPI-Specification-2.1"]
+	path = OpenAPI-Specification-2.1
+	url = https://github.com/dutradda/OpenAPI-Specification-2.1
