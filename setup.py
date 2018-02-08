@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 import os.path
 
@@ -21,15 +21,7 @@ version = version['VERSION']
 
 setup(
     name='openapi21',
-    packages=['openapi21'],
-    package_data={
-        '': [
-            'OpenAPI-Specification-2.1/schema.json',
-            'OpenAPI-Specification-2.1/example/*.json',
-            'OpenAPI-Specification-2.1/example/dresses/*.json',
-            'OpenAPI-Specification-2.1/example/shoes/*.json'
-        ]
-    },
+    packages=find_packages(),
     include_package_data=True,
     version=version,
     description='An Unofficial OpenAPI 2.1 Specification Python Validator',

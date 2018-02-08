@@ -9,8 +9,10 @@ from swagger_spec_validator.validator20 import (deref, validate_apis,
                                                 validate_definitions)
 from yaml import safe_load
 
+from openapi21 import SCHEMA_URL
 
-def validate_spec_url(spec_url, schema_url=''):
+
+def validate_spec_url(spec_url, schema_url=SCHEMA_URL):
     return validate_spec(read_url(spec_url), schema_url, spec_url)
 
 
@@ -19,7 +21,7 @@ def read_url(url, timeout=1):
         return safe_load(fh.read().decode('utf-8'))
 
 
-def validate_spec(spec_dict, schema_url, spec_url=''):
+def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
     openapi_resolver = validate_json(spec_dict,
                                      schema_url,
                                      spec_url)
@@ -35,26 +37,23 @@ def validate_spec(spec_dict, schema_url, spec_url=''):
     return openapi_resolver
 
 
-def validate_json(spec_dict, schema_url, spec_url=''):
+def validate_json(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
     schema = read_url(schema_url)
     handlers = {
         'http': read_url,
         'https': read_url,
         'file': read_url,
     }
-
     schema_resolver = RefResolver(
         base_uri=schema_url,
         referrer=schema,
         handlers=handlers
     )
-
     spec_resolver = RefResolver(
         base_uri=spec_url,
         referrer=spec_dict,
         handlers=handlers
     )
-
     ref_validators.validate(
         instance=spec_dict,
         schema=schema,
