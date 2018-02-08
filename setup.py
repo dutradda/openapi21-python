@@ -32,6 +32,7 @@ setup(
     version=version,
     description='An Unofficial OpenAPI 2.1 Specification Python Validator',
     author='Diogo Dutra',
+    author_email='dutradda@gmail.com',
     url='https://github.com/dutradda/openapi21-python',
     keywords='openapi oai swagger rest api validator validation',
     license='MIT',
