@@ -22,6 +22,15 @@ version = version['VERSION']
 setup(
     name='openapi21',
     packages=['openapi21'],
+    package_data={
+        '': [
+            'OpenAPI-Specification-2.1/schema.json',
+            'OpenAPI-Specification-2.1/example/*.json',
+            'OpenAPI-Specification-2.1/example/dresses/*.json',
+            'OpenAPI-Specification-2.1/example/shoes/*.json'
+        ]
+    },
+    include_package_data=True,
     version=version,
     description='An Unofficial OpenAPI 2.1 Specification Python Validator',
     author='Diogo Dutra',
