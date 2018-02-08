@@ -7,12 +7,18 @@ import os.path
 root_dir = os.path.dirname(os.path.abspath(__file__))
 version_f = open(os.path.join(root_dir, 'openapi21/version.py'))
 install_requires = [
-    'jsonschema==2.6.0',
-    'swagger_spec_validator==2.1.0',
-    'PyYAML==3.12'
+    'jsonschema>=2.6.0',
+    'swagger_spec_validator>=2.1.0',
+    'PyYAML>=3.12'
 ]
-tests_require = ['pytest', 'pytest-cov']
-setup_requires = ['pytest-runner', 'flake8']
+tests_require = [
+    'pytest',
+    'pytest-cov'
+]
+setup_requires = [
+    'pytest-runner',
+    'flake8'
+]
 version = {}
 
 exec(version_f.read(), version)
