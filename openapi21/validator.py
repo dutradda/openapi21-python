@@ -1,8 +1,10 @@
 import contextlib
 import functools
+import os
 
 from jsonschema.validators import Draft4Validator, RefResolver
 from six import iteritems
+from six.moves.urllib.parse import urlsplit
 from six.moves.urllib.request import urlopen
 from swagger_spec_validator import ref_validators
 from swagger_spec_validator.validator20 import (deref, validate_apis,
@@ -12,8 +14,27 @@ from yaml import safe_load
 from openapi21 import SCHEMA_URL
 
 
-def validate_spec_url(spec_url, schema_url=SCHEMA_URL):
-    return validate_spec(read_url(spec_url), schema_url, spec_url)
+def validate_spec_url(spec_url, schema_url=SCHEMA_URL,
+                      spec_url_base_path=None,
+                      schema_url_base_path=None):
+    spec_url = _normalize_url(spec_url, spec_url_base_path)
+    return validate_spec(read_url(spec_url), schema_url, spec_url,
+                         spec_url_base_path, schema_url_base_path)
+
+
+def _normalize_url(url, url_base_path):
+    if url_base_path is None:
+        url_base_path = os.getcwd()
+    elif not os.path.isabs(url_base_path):
+            raise ValueError("The 'base_path' must be an absolute path")
+
+    if url and not urlsplit(url).scheme:
+        if not os.path.isabs(url):
+            url = os.path.join(url_base_path, url)
+
+        url = 'file:' + url
+
+    return url
 
 
 def read_url(url, timeout=1):
@@ -21,10 +42,11 @@ def read_url(url, timeout=1):
         return safe_load(fh.read().decode('utf-8'))
 
 
-def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
-    openapi_resolver = validate_json(spec_dict,
-                                     schema_url,
-                                     spec_url)
+def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url='',
+                  spec_url_base_path=None, schema_url_base_path=None):
+    openapi_resolver = validate_json(spec_dict, schema_url, spec_url,
+                                     spec_url_base_path,
+                                     schema_url_base_path)
     bound_deref = functools.partial(deref, resolver=openapi_resolver)
     spec_dict = bound_deref(spec_dict)
     apis = _apis_defs_getter(spec_dict['paths'], bound_deref)
@@ -37,7 +59,11 @@ def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
     return openapi_resolver
 
 
-def validate_json(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
+def validate_json(spec_dict, schema_url=SCHEMA_URL, spec_url='',
+                  spec_url_base_path=None, schema_url_base_path=None):
+    spec_url, schema_url = _normalize_urls(spec_url, schema_url,
+                                           spec_url_base_path,
+                                           schema_url_base_path)
     schema = read_url(schema_url)
     handlers = {
         'http': read_url,
@@ -63,6 +89,14 @@ def validate_json(spec_dict, schema_url=SCHEMA_URL, spec_url=''):
     )
 
     return spec_resolver
+
+
+def _normalize_urls(spec_url, schema_url,
+                    spec_url_base_path,
+                    schema_url_base_path):
+    spec_url = _normalize_url(spec_url, spec_url_base_path)
+    schema_url = _normalize_url(schema_url, schema_url_base_path)
+    return spec_url, schema_url
 
 
 def _apis_defs_getter(object_, deref):

@@ -1,0 +1,123 @@
+{
+    "swagger":"2.1",
+    "info":{
+        "version": "1.0.0",
+        "title": "Specification Validation"
+    },
+    "paths": {
+        "allOf": [{
+            "$ref": "paths/testParameters.json"
+        },{
+            "$ref": "paths/testResponses.json"
+        },{
+            "$ref": "paths/testSchema.json"
+        }],
+        "/test_paths_root": {
+            "get": {
+                "controllerId": "validator.path3_controller",
+                "operationId": "test_paths_root",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "allOf": [{
+            "$ref": "commonDefinitions.json"
+        },{
+            "$ref": "paths/definitions/testParametersDefinitions.json"
+        },{
+            "$ref": "paths/definitions/testResponsesDefinitions.json"
+        },{
+            "$ref": "paths/definitions/testSchemaDefinitions.json"
+        }],
+        "testDefinitionsRoot": { "type": "string" }
+    },
+    "x-test": "Test vendor schema on root",
+    "host": "test.io",
+    "basePath": "/api",
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "responses": {
+        "200": {
+            "description": "OK"
+        }
+    },
+    "security": [{
+        "secure": ["test-security"]
+    }],
+    "securityDefinitions": {
+        "basic": {
+            "type": "basic",
+            "description": "basic",
+            "x-basic": "basic"
+        },
+        "apiKey": {
+            "type": "apiKey",
+            "name": "key",
+            "in": "query",
+            "description": "apiKey",
+            "x-apiKey": "apiKey"
+        },
+        "oauthImplicit": {
+            "type": "oauth2",
+            "flow": "implicit",
+            "authorizationUrl": "/auth",
+            "description": "oauthImplicit",
+            "scopes": {
+                "test": "implicit"
+            },
+            "x-oauthImplicit": "oauthImplicit"
+        },
+        "oauth2Password": {
+            "type": "oauth2",
+            "flow": "password",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2Password",
+            "scopes": {
+                "test": "password"
+            },
+            "x-oauth2Password": "oauth2Password"
+        },
+        "oauth2Application": {
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2Application",
+            "scopes": {
+                "test": "application"
+            },
+            "x-oauth2Application": "oauth2Application"
+        },
+        "oauth2AccessCode": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "/auth",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2AccessCode",
+            "scopes": {
+                "test": "accessCode"
+            },
+            "x-oauth2AccessCode": "oauth2AccessCode"
+        }
+    },
+    "tags": [{
+        "name": "test",
+        "description": "Store Example",
+        "externalDocs": {
+            "url": "/test/doc",
+            "x-tag-doc": "doc",
+            "description": "External Doc"
+        },
+        "x-tag": "tag"
+    }],
+    "externalDocs": {
+        "url": "/test/doc",
+        "x-tag-doc": "doc",
+        "description": "External Doc"
+    }
+}
