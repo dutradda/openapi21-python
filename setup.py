@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-
-from setuptools import setup, find_packages
-
 import os.path
+
+from setuptools import find_packages, setup
+
+from command import ReadMeGeneratorCmd
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 version_f = open(os.path.join(root_dir, 'openapi21/version.py'))
@@ -17,13 +18,13 @@ tests_require = [
 ]
 setup_requires = [
     'pytest-runner',
-    'flake8'
+    'flake8',
+    'jinja2'
 ]
 version = {}
 
 exec(version_f.read(), version)
 version = version['VERSION']
-
 
 setup(
     name='openapi21',
@@ -53,5 +54,6 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
         'Topic :: Text Processing'
-    ]
+    ],
+    cmdclass={"genreadme" : ReadMeGeneratorCmd},
 )

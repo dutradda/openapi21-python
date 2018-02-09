@@ -1,0 +1,120 @@
+{
+    "swagger":"2.1",
+    "info":{
+        "version": "1.0.0",
+        "title": "Store Example"
+    },
+    "paths": {
+        "allOf": [{
+            "$ref": "dresses/swagger.json"
+        },{
+            "$ref": "shoes/swagger.json"
+        }],
+        "/status": {
+            "get": {
+                "controllerId": "store.status_controller",
+                "operationId": "get_status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": { "$ref": "#/definitions/status" }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "allOf": [{
+            "$ref": "definitions.json"
+        },{
+            "$ref": "dresses/definitions.json"
+        },{
+            "$ref": "shoes/definitions.json"
+        }],
+        "status": { "type": "string" }
+    },
+    "x-store": "Store Swagger",
+    "host": "store.io",
+    "basePath": "/api",
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "responses": {
+        "200": {
+            "description": "OK"
+        }
+    },
+    "security": [{
+        "secure": ["store-security"]
+    }],
+    "securityDefinitions": {
+        "basic": {
+            "type": "basic",
+            "description": "basic",
+            "x-basic": "basic"
+        },
+        "apiKey": {
+            "type": "apiKey",
+            "name": "key",
+            "in": "query",
+            "description": "apiKey",
+            "x-apiKey": "apiKey"
+        },
+        "oauthImplicit": {
+            "type": "oauth2",
+            "flow": "implicit",
+            "authorizationUrl": "/auth",
+            "description": "oauthImplicit",
+            "scopes": {
+                "store": "implicit"
+            },
+            "x-oauthImplicit": "oauthImplicit"
+        },
+        "oauth2Password": {
+            "type": "oauth2",
+            "flow": "password",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2Password",
+            "scopes": {
+                "store": "password"
+            },
+            "x-oauth2Password": "oauth2Password"
+        },
+        "oauth2Application": {
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2Application",
+            "scopes": {
+                "store": "application"
+            },
+            "x-oauth2Application": "oauth2Application"
+        },
+        "oauth2AccessCode": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "/auth",
+            "tokenUrl": "/auth?token=",
+            "description": "oauth2AccessCode",
+            "scopes": {
+                "store": "accessCode"
+            },
+            "x-oauth2AccessCode": "oauth2AccessCode"
+        }
+    },
+    "tags": [{
+        "name": "store",
+        "description": "Store Example",
+        "externalDocs": {
+            "url": "/store/doc",
+            "x-tag-doc": "doc",
+            "description": "External Doc"
+        },
+        "x-tag": "tag"
+    }],
+    "externalDocs": {
+        "url": "/store/doc",
+        "x-tag-doc": "doc",
+        "description": "External Doc"
+    }
+}

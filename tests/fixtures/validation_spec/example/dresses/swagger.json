@@ -1,0 +1,20 @@
+{
+    "/dresses": {
+        "post": {
+            "parameters": [{
+                "name": "dress",
+                "in": "formData",
+                "description": "dress data",
+                "allowEmptyValue": true,
+                "type": "object",
+                "schema": { "type": "object" }
+            }],
+            "controllerId": "store.dresses_controller",
+            "operationId": "post_dress",
+            "responses": {
+                "201": { "description": "Created" }
+            }
+        }
+    },
+    "/dresses/{id}": {}
+}
