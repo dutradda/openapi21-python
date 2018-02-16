@@ -1,9 +1,3 @@
-include openapi21/spec/example/dresses/definitions.json
-include openapi21/spec/example/dresses/swagger.json
-include openapi21/spec/example/shoes/definitions.json
-include openapi21/spec/example/shoes/swagger.json
-include openapi21/spec/example/definitions.json
-include openapi21/spec/example/swagger.json
 include openapi21/spec/schemaDefinitions/parameters/bodyDefinition.json
 include openapi21/spec/schemaDefinitions/parameters/commonPropertiesDefinition.json
 include openapi21/spec/schemaDefinitions/parameters/formDataDefinition.json
@@ -20,5 +14,5 @@ include openapi21/spec/schemaDefinitions/responseHeadersDefinition.json
 include openapi21/spec/schemaDefinitions/responseHeadersObjectDefinition.json
 include openapi21/spec/schemaDefinitions/responsesDefinition.json
 include openapi21/spec/schemaDefinitions/schemaDefinition.json
-include openapi21/spec/schemaDefinitions/securityDefinition.json
+include openapi21/spec/schemaDefinitions/securityDefinitions.json
 include openapi21/spec/schema.json
