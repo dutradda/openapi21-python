@@ -1,3 +1,3 @@
 -e git+https://github.com/Julian/jsonschema.git#egg=jsonschema
--e git+https://github.com/Yelp/swagger_spec_validator.git#egg=swagger-spec-validator
+-e git+https://github.com/dutradda/swagger_spec_validator.git@fix_definitions_objects_validation#egg=swagger-spec-validator
 -e git+https://github.com/yaml/pyyaml.git#egg=PyYAML

@@ -1,1 +1,11 @@
-{}
+{
+  "paramWithExample": {
+    "name": "test_body",
+    "in": "body",
+    "schema": {},
+    "example": {"$ref": "../../commonDefinitions.json#generic_example"}
+  },
+  "paramListWithExamples": [{
+    "$ref": "#/paramWithExample"
+  }]
+}

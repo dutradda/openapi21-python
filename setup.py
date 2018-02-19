@@ -8,7 +8,7 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 version_f = open(os.path.join(root_dir, 'openapi21/version.py'))
 install_requires = [
     'jsonschema>=2.6.0',
-    'swagger_spec_validator>=2.1.0',
+    'swagger-spec-validator==3.0.0',
     'PyYAML>=3.12'
 ]
 tests_require = [
@@ -18,6 +18,11 @@ tests_require = [
 setup_requires = [
     'pytest-runner',
     'flake8'
+]
+dependency_links = [
+    ('https://github.com/dutradda/swagger_spec_validator'
+     '/tarball/fix_definitions_objects_validation_fork'
+     '#egg=swagger-spec-validator-3.0.0')
 ]
 version = {}
 
@@ -39,6 +44,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=tests_require,
+    dependency_links=dependency_links,
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',

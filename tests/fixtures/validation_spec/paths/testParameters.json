@@ -1,1 +1,37 @@
-{}
+{
+  "/test_parameters_ref_examples": {
+    "get": {
+      "parameters": [{
+        "name": "test_header",
+        "in": "header",
+        "type": "object",
+        "schema": {},
+        "example": {
+            "size": 36,
+            "color": "red"
+        }
+      },{
+        "$ref": "definitions/testParametersDefinitions.json#paramWithExample"
+      }],
+      "controllerId": "validator.path3_controller",
+      "operationId": "test_paths_root",
+      "responses": {
+          "200": {
+              "description": "OK"
+          }
+      }
+    },
+    "post": {
+      "parameters": {
+        "$ref": "definitions/testParametersDefinitions.json#paramListWithExamples"
+      },
+      "controllerId": "validator.path3_controller",
+      "operationId": "test_paths_root",
+      "responses": {
+          "200": {
+              "description": "OK"
+          }
+      }
+    }
+  }
+}

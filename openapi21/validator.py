@@ -3,7 +3,7 @@ import functools
 import os
 
 from jsonschema.validators import Draft4Validator, RefResolver
-from six import iteritems
+from six import iteritems, itervalues
 from six.moves.urllib.parse import urlsplit
 from six.moves.urllib.request import urlopen
 from swagger_spec_validator import ref_validators
@@ -54,6 +54,7 @@ def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url='',
                                     bound_deref)
 
     validate_apis(apis, bound_deref)
+    _validate_apis_parameters(apis, bound_deref)
     validate_definitions(definitions, bound_deref)
 
     return openapi_resolver
@@ -111,3 +112,86 @@ def _apis_defs_getter(object_, deref):
             new_object[key] = value
 
     return deref(new_object)
+
+
+def _validate_apis_parameters(apis, deref):
+    for api_name, api_body in iteritems(apis):
+        base_uri = _get_base_uri(api_body)
+        api_body = deref(api_body)
+
+        base_uri = _get_base_uri(api_body.get('parameters'), base_uri)
+        api_params = deref(api_body.pop('parameters', []))
+
+        _validate_parameters(api_params, deref, api_name, 'all', base_uri)
+
+        for oper_name in api_body:
+            if oper_name.startswith('x-'):
+                continue
+            else:
+                base_uri = _get_base_uri(api_body[oper_name], base_uri)
+                oper_body = deref(api_body[oper_name])
+
+                base_uri = _get_base_uri(oper_body.get('parameters'), base_uri)
+                oper_params = deref(oper_body.get('parameters', []))
+
+                _validate_parameters(oper_params, deref, api_name,
+                                     oper_name, base_uri)
+
+
+def _get_base_uri(object_, base_uri=''):
+    if isinstance(object_, dict) and '$ref' in object_:
+        return object_['x-scope'][-1]
+    else:
+        return base_uri
+
+
+def _validate_parameters(parameters, deref, api_path, api_method, base_uri):
+    for param in parameters:
+        base_uri = _get_base_uri(param, base_uri)
+        param = deref(param)
+
+        base_uri = _get_base_uri(param.get('example'), base_uri)
+        example = deref(param.get('example'))
+
+        base_uri = _get_base_uri(param.get('examples'), base_uri)
+        examples = deref(param.get('examples'))
+
+        if example or examples:
+            if example:
+                examples = {None: example}
+
+            if param.get('type') == 'object' or param['in'] == 'body':
+                schema = param['schema']
+            else:
+                schema = _get_schema_from_param(param)
+
+            _validate_parameter_examples(schema, examples, base_uri)
+
+
+def _get_schema_from_param(param):
+    schema = param.copy()
+    schema.pop('name', None)
+    schema.pop('in', None)
+    schema.pop('required', None)
+    return schema
+
+
+def _validate_parameter_examples(schema, examples, base_uri):
+    handlers = {
+        'http': read_url,
+        'https': read_url,
+        'file': read_url,
+    }
+
+    base_uri = _get_base_uri(schema, base_uri)
+    spec_resolver = RefResolver(base_uri, schema, handlers=handlers)
+
+    for example in itervalues(examples):
+        ref_validators.validate(
+            instance=example,
+            schema=schema,
+            resolver=spec_resolver,
+            instance_cls=ref_validators.create_dereffing_validator(
+                spec_resolver),
+            cls=Draft4Validator
+        )
