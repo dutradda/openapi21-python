@@ -1,0 +1,27 @@
+{
+    "swagger":"2.1",
+    "info":{
+      "version": "1.0.0",
+      "title": "Specification Validation Failing"
+    },
+    "paths": {
+      "/test_paths_root": {
+        "parameters": [{
+          "name": "test",
+          "in": "body",
+          "schema": {},
+          "example": {},
+          "examples": {}
+        }],
+        "get": {
+            "controllerId": "validator.path3_controller",
+            "operationId": "test_paths_root",
+            "responses": {
+                "200": {
+                    "description": "OK"
+                }
+            }
+        }
+      }
+    }
+}
