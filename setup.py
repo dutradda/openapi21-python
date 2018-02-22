@@ -13,7 +13,8 @@ install_requires = [
 ]
 tests_require = [
     'pytest',
-    'pytest-cov'
+    'pytest-cov',
+    'mock'
 ]
 setup_requires = [
     'pytest-runner',
@@ -28,7 +29,6 @@ version = {}
 
 exec(version_f.read(), version)
 version = version['VERSION']
-
 
 setup(
     name='openapi21',
@@ -59,5 +59,10 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
         'Topic :: Text Processing'
-    ]
+    ],
+    entry_points={
+        'console_scripts': [
+            'openapi21-validator = openapi21.cli:main'
+        ]
+    }
 )

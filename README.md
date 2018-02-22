@@ -5,6 +5,20 @@
 An OpenAPI 2.1 Unofficial Specification Python Validator.
 
 Usage example:
+```shell
+$ pip install openapi21
+$ openapi21-validator https://cdn.rawgit.com/dutradda/OpenAPI-Specification-2.1/master/example/swagger.json
+https://cdn.rawgit.com/dutradda/OpenAPI-Specification-2.1/master/example/swagger.json - OK
+
+$ openapi21-validator my_awesome_spec.json my_other_awesome_spec.yml
+my_awesome_spec.json - OK
+my_other_awesome_spec.yml - OK
+
+$ openapi21-validator my_awesome_spec.json my_other_awesome_spec.yml -t
+$
+```
+
+Or inside the python code:
 ```python
 from openapi21 import validate_spec, validate_spec_url
 
