@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.org/dutradda/openapi21-python.svg?branch=master)](https://travis-ci.org/dutradda/openapi21-python)
 [![Coverage Status](https://coveralls.io/repos/github/dutradda/openapi21-python/badge.svg?branch=master)](https://coveralls.io/github/dutradda/openapi21-python?branch=master)
+[![PyPi Last Version](https://img.shields.io/pypi/v/openapi21.svg)](https://pypi.python.org/pypi/openapi21)
+[![PyPi Develop Status](https://img.shields.io/pypi/status/openapi21.svg)](https://pypi.python.org/pypi/openapi21)
+[![Python Versions](https://img.shields.io/pypi/pyversions/openapi21.svg)](https://pypi.python.org/pypi/openapi21)
+[![License](https://img.shields.io/pypi/l/openapi21.svg)](https://github.com/dutradda/openapi21-python/blob/master/LICENSE)
 
 # openapi21-python
 An OpenAPI 2.1 Unofficial Specification Python Validator.
