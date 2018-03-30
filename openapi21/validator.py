@@ -6,9 +6,9 @@ from jsonschema.validators import Draft4Validator, RefResolver
 from six import iteritems, itervalues
 from six.moves.urllib.parse import urlsplit
 from six.moves.urllib.request import urlopen
-from swagger_spec_validator import ref_validators
-from swagger_spec_validator.validator20 import (deref, validate_apis,
-                                                validate_definitions)
+from swagger_spec_validator3 import ref_validators
+from swagger_spec_validator3.validator20 import (deref, validate_apis,
+                                                 validate_definitions)
 from yaml import safe_load
 
 from openapi21 import SCHEMA_URL

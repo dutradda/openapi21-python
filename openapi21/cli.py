@@ -4,7 +4,7 @@ import sys
 from jsonschema.exceptions import (FormatError, RefResolutionError,
                                    UnknownType, _Error)
 from six import print_
-from swagger_spec_validator.common import SwaggerValidationError
+from swagger_spec_validator3.common import SwaggerValidationError
 
 from openapi21 import validate_spec_url
 

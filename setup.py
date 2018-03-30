@@ -8,7 +8,7 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 version_f = open(os.path.join(root_dir, 'openapi21/version.py'))
 install_requires = [
     'jsonschema>=2.6.0',
-    'swagger-spec-validator3>=3.0.0',
+    'swagger-spec-validator3>=3.0.4',
     'PyYAML>=3.12'
 ]
 tests_require = [
