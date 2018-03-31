@@ -42,7 +42,6 @@
             }
           }
         ],
-        "controllerId": "store.dresses_controller",
         "operationId": "post_dress",
         "responses": {
           "201": {
@@ -96,7 +95,6 @@
             "type": "string"
           }
         ],
-        "controllerId": "store.dresses_controller",
         "operationId": "get_dress",
         "responses": {
           "201": {
@@ -166,7 +164,6 @@
             }
           }
         ],
-        "controllerId": "store.shoes_controller",
         "operationId": "post_shoe",
         "responses": {
           "201": {
@@ -220,7 +217,6 @@
             "type": "string"
           }
         ],
-        "controllerId": "store.shoes_controller",
         "operationId": "get_shoe",
         "responses": {
           "201": {

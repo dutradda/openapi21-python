@@ -13,7 +13,6 @@
       },{
         "$ref": "definitions/testParametersDefinitions.json#paramWithExample"
       }],
-      "controllerId": "validator.path3_controller",
       "operationId": "test_paths_root",
       "responses": {
           "200": {
@@ -25,7 +24,6 @@
       "parameters": {
         "$ref": "definitions/testParametersDefinitions.json#paramListWithExamples"
       },
-      "controllerId": "validator.path3_controller",
       "operationId": "test_paths_root",
       "responses": {
           "200": {
