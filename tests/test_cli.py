@@ -1,6 +1,5 @@
 import os.path
 
-import mock
 import pytest
 
 TESTS_ROOT = os.path.dirname(os.path.realpath(__file__))

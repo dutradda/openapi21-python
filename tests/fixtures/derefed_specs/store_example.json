@@ -1,0 +1,375 @@
+{
+  "swagger": "2.1",
+  "info": {
+    "version": "0.0.1",
+    "title": "Store Example"
+  },
+  "paths": {
+    "/dresses": {
+      "post": {
+        "parameters": [
+          {
+            "name": "dress",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "size"
+              ],
+              "properties": {
+                "size": {
+                  "enum": [
+                    "P",
+                    "M",
+                    "G"
+                  ]
+                }
+              },
+              "patternProperties": {
+                "^color(s|ed)?$": {
+                  "enum": [
+                    "red",
+                    "green",
+                    "blue"
+                  ]
+                }
+              }
+            },
+            "example": {
+              "size": "P",
+              "color": "red"
+            }
+          }
+        ],
+        "controllerId": "store.dresses_controller",
+        "operationId": "post_dress",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/dresses/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "examples": {
+              "id1": 1,
+              "id2": 2
+            }
+          },
+          {
+            "name": "color",
+            "in": "header",
+            "type": "object",
+            "schema": {
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "red": {
+                "name": "red"
+              },
+              "green": {
+                "name": "green"
+              },
+              "blue": {
+                "name": "blue"
+              }
+            }
+          },
+          {
+            "name": "brand",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "controllerId": "store.dresses_controller",
+        "operationId": "get_dress",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "size"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "size": {
+                  "enum": [
+                    "P",
+                    "M",
+                    "G"
+                  ]
+                }
+              },
+              "patternProperties": {
+                "^color(s|ed)?$": {
+                  "enum": [
+                    "red",
+                    "green",
+                    "blue"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shoes": {
+      "post": {
+        "parameters": [
+          {
+            "name": "shoe",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "size",
+                "color"
+              ],
+              "properties": {
+                "size": {
+                  "type": "integer"
+                },
+                "color": {
+                  "enum": [
+                    "red",
+                    "green",
+                    "blue"
+                  ]
+                }
+              }
+            },
+            "example": {
+              "size": 36,
+              "color": "red"
+            }
+          }
+        ],
+        "controllerId": "store.shoes_controller",
+        "operationId": "post_shoe",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/shoes/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "examples": {
+              "id1": 1,
+              "id2": 2
+            }
+          },
+          {
+            "name": "color",
+            "in": "header",
+            "type": "object",
+            "schema": {
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "red": {
+                "name": "red"
+              },
+              "green": {
+                "name": "green"
+              },
+              "blue": {
+                "name": "blue"
+              }
+            }
+          },
+          {
+            "name": "brand",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "controllerId": "store.shoes_controller",
+        "operationId": "get_shoe",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "size",
+                "color"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "color": {
+                  "enum": [
+                    "red",
+                    "green",
+                    "blue"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "color": {
+      "enum": [
+        "red",
+        "green",
+        "blue"
+      ]
+    },
+    "colorsExample": {
+      "red": {
+        "name": "red"
+      },
+      "green": {
+        "name": "green"
+      },
+      "blue": {
+        "name": "blue"
+      }
+    },
+    "post_dress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "size"
+      ],
+      "properties": {
+        "size": {
+          "enum": [
+            "P",
+            "M",
+            "G"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^color(s|ed)?$": {
+          "enum": [
+            "red",
+            "green",
+            "blue"
+          ]
+        }
+      }
+    },
+    "get_dress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "size"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "size": {
+          "enum": [
+            "P",
+            "M",
+            "G"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^color(s|ed)?$": {
+          "enum": [
+            "red",
+            "green",
+            "blue"
+          ]
+        }
+      }
+    },
+    "post_shoe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "size",
+        "color"
+      ],
+      "properties": {
+        "size": {
+          "type": "integer"
+        },
+        "color": {
+          "enum": [
+            "red",
+            "green",
+            "blue"
+          ]
+        }
+      }
+    },
+    "get_shoe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "size",
+        "color"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "color": {
+          "enum": [
+            "red",
+            "green",
+            "blue"
+          ]
+        }
+      }
+    }
+  }
+}

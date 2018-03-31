@@ -7,5 +7,6 @@
   },
   "paramListWithExamples": [{
     "$ref": "#/paramWithExample"
-  }]
+  }],
+  "unusedDef": {"$ref": "../../commonDefinitions.json#generic_items"}
 }

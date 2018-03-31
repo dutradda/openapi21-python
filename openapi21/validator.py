@@ -1,7 +1,10 @@
 import contextlib
 import functools
+import logging
 import os
+from copy import deepcopy
 
+from jsonschema.exceptions import RefResolutionError
 from jsonschema.validators import Draft4Validator, RefResolver
 from six import iteritems, itervalues
 from six.moves.urllib.parse import urlsplit
@@ -12,6 +15,8 @@ from swagger_spec_validator3.validator20 import (deref, validate_apis,
 from yaml import safe_load
 
 from openapi21 import SCHEMA_URL
+
+logger = logging.getLogger('openapi21')
 
 
 def validate_spec_url(spec_url, schema_url=SCHEMA_URL,
@@ -42,20 +47,51 @@ def read_url(url, timeout=1):
         return safe_load(fh.read().decode('utf-8'))
 
 
+handlers = {
+    'http': read_url,
+    'https': read_url,
+    'file': read_url,
+}
+
+
 def validate_spec(spec_dict, schema_url=SCHEMA_URL, spec_url='',
                   spec_url_base_path=None, schema_url_base_path=None):
+    spec_dict = deepcopy(spec_dict)
     openapi_resolver = validate_json(spec_dict, schema_url, spec_url,
                                      spec_url_base_path,
                                      schema_url_base_path)
     bound_deref = functools.partial(deref, resolver=openapi_resolver)
-    spec_dict = bound_deref(spec_dict)
-    apis = _apis_defs_getter(spec_dict['paths'], bound_deref)
-    definitions = _apis_defs_getter(spec_dict.get('definitions', {}),
-                                    bound_deref)
+    get_deref = functools.partial(_get_deref, deref=bound_deref)
+    spec_dict = get_deref(spec_dict, 'root', 'root')
+    apis = _obj_deref_getter(spec_dict['paths'], get_deref, 'paths')
+    definitions = _obj_deref_getter(spec_dict.get('definitions', {}),
+                                    get_deref, 'definitions')
+    parameters = _obj_deref_getter(spec_dict.get('parameters', {}),
+                                   get_deref, 'parameters')
+    responses = _obj_deref_getter(spec_dict.get('responses', {}),
+                                  get_deref, 'responses')
+    securityDefinitions = \
+        _obj_deref_getter(spec_dict.get('securityDefinitions', {}),
+                          get_deref, 'securityDefinitions')
 
     validate_apis(apis, bound_deref)
     _validate_apis_parameters(apis, bound_deref)
     validate_definitions(definitions, bound_deref)
+
+    spec_dict['paths'] = apis
+
+    if 'definitions' in spec_dict:
+        spec_dict['definitions'] = definitions
+    if 'parameters' in spec_dict:
+        spec_dict['parameters'] = parameters
+    if 'responses' in spec_dict:
+        spec_dict['responses'] = responses
+    if 'securityDefinitions' in spec_dict:
+        spec_dict['securityDefinitions'] = securityDefinitions
+
+    openapi_resolver.spec_derefered = _recursive_deref(spec_dict, get_deref,
+                                                       'root', 'root')
+    openapi_resolver.derefer = get_deref
 
     return openapi_resolver
 
@@ -66,11 +102,6 @@ def validate_json(spec_dict, schema_url=SCHEMA_URL, spec_url='',
                                            spec_url_base_path,
                                            schema_url_base_path)
     schema = read_url(schema_url)
-    handlers = {
-        'http': read_url,
-        'https': read_url,
-        'file': read_url,
-    }
     schema_resolver = RefResolver(
         base_uri=schema_url,
         referrer=schema,
@@ -100,18 +131,32 @@ def _normalize_urls(spec_url, schema_url,
     return spec_url, schema_url
 
 
-def _apis_defs_getter(object_, deref):
+def _get_deref(value, key, title, deref):
+    try:
+        return deref(value)
+    except RefResolutionError:
+        logger.warning(
+            "Resolution error on '{}' reference for '{}' "
+            "attribue in '{}' object. This maybe occur for an "
+            "unused definition. Skipping this error"
+            .format(value['$ref'], key, title)
+        )
+        return {}
+
+
+def _obj_deref_getter(object_, deref, title):
     new_object = {}
     for key, value in iteritems(object_):
-        value = deref(value)
+        value = deref(value, key, title)
         if key == 'allOf':
             for all_of_i in value:
-                for key_i, value_i in iteritems(deref(all_of_i)):
-                    new_object[key_i] = deref(value_i)
+                for key_i, value_i in iteritems(deref(all_of_i, key, title)):
+                    value_i = deref(value_i, key_i, title)
+                    new_object[key_i] = value_i
         else:
             new_object[key] = value
 
-    return deref(new_object)
+    return new_object
 
 
 def _validate_apis_parameters(apis, deref):
@@ -177,12 +222,6 @@ def _get_schema_from_param(param):
 
 
 def _validate_parameter_examples(schema, examples, base_uri):
-    handlers = {
-        'http': read_url,
-        'https': read_url,
-        'file': read_url,
-    }
-
     base_uri = _get_base_uri(schema, base_uri)
     spec_resolver = RefResolver(base_uri, schema, handlers=handlers)
 
@@ -195,3 +234,22 @@ def _validate_parameter_examples(schema, examples, base_uri):
                 spec_resolver),
             cls=Draft4Validator
         )
+
+
+def _recursive_deref(object_, deref, key, title):
+    if not isinstance(object_, dict) and not isinstance(object_, list):
+        return object_
+
+    if isinstance(object_, dict):
+        if '$ref' in object_:
+            object_ = deref(object_, key, title)
+            object_ = _recursive_deref(object_, deref, key, title)
+        else:
+            for key, value in iteritems(object_):
+                object_[key] = _recursive_deref(value, deref, key, title)
+
+    else:
+        for key, value in enumerate(object_):
+                object_[key] = _recursive_deref(value, deref, key, title)
+
+    return object_

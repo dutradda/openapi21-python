@@ -43,6 +43,7 @@
     "schemes": ["http", "https"],
     "consumes": ["application/json"],
     "produces": ["application/json"],
+    "parameters": {},
     "responses": {
         "200": {
             "description": "OK"

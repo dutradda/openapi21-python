@@ -1,6 +1,7 @@
 {
   "generic_example": {
-      "test1": 1,
-      "test2": "test"
-  }
+    "test1": 1,
+    "test2": "test"
+  },
+  "generic_items": {"type": "string"}
 }

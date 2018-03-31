@@ -3,7 +3,7 @@ import os.path
 from jsonschema.exceptions import ValidationError
 
 import pytest
-from openapi21 import OPENAPI21_PATH, validate_spec_url
+from openapi21 import validate_spec_url
 
 TESTS_ROOT = os.path.dirname(os.path.realpath(__file__))
 
